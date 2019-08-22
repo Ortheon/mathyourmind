@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../Utils/elements.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 
 class PlaySettingScreen extends StatefulWidget {
@@ -17,10 +18,18 @@ class _PlaySettingScreenState extends State<PlaySettingScreen> {
     return SafeArea(
       child: Scaffold(
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(children: <Widget>[
-              Expanded(child: Center(child: Text('settings'))),
-
+              Expanded(child: Center(child: SizedBox(child: FadeAnimatedTextKit(
+        text: ['PREPARE YOURSELF', 'WILL YOU DARE?', 'BE THE BEST'],
+          duration: Duration(seconds: 10),
+          textStyle: TextStyle(
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.bold
+              ),
+        ),),),
+              )
             ],),
             Center(
               child: Row(
@@ -30,6 +39,8 @@ class _PlaySettingScreenState extends State<PlaySettingScreen> {
                   Column(
                     children: <Widget>[
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+
                         children: <Widget>[
                           AppIconButton(ICONS.PLUS),
                           AppIconButton(ICONS.MINUS),
@@ -51,9 +62,14 @@ class _PlaySettingScreenState extends State<PlaySettingScreen> {
                   ),
                   FlatButton(
                     onPressed: (){},
-                    child: Text('PLAY'),
+                    child: IconButton(icon: Icon(FontAwesomeIcons.play), onPressed: null),
                   ),
-                  Column(),
+                  Column(
+                    //do wyjebania
+                    children: <Widget>[
+
+                    ],
+                  ),
                 ],
               ),
             ),

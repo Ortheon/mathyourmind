@@ -9,7 +9,8 @@ class SharedPrefsHelper {
   static final bool multiplyInPlay = false;
   static final bool divideInPlay = false;
 
-  static Future<bool> getAddInPlay() async {
+
+    static Future<bool> getAddInPlay() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getBool('addInPlay');
   }
