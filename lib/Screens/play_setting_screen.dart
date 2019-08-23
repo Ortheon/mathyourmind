@@ -4,6 +4,7 @@ import '../Utils/elements.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 
+
 class PlaySettingScreen extends StatefulWidget {
 
   static const routeName = 'play-settings';
@@ -64,9 +65,10 @@ class _PlaySettingScreenState extends State<PlaySettingScreen> {
                     onPressed: (){},
                     child: IconButton(icon: Icon(FontAwesomeIcons.play), onPressed: null),
                   ),
-                  Column(
+                  Wrap(
                     //do wyjebania
                     children: <Widget>[
+                      DifficultyRadio(),
 
                     ],
                   ),

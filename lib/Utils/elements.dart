@@ -3,6 +3,8 @@ import 'package:mathyourmind/Utils/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'SharedPrefsHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:grouped_buttons/grouped_buttons.dart';
+
 
 
 class RoundedButton extends StatelessWidget {
@@ -127,3 +129,67 @@ IconData getProperIcon(ICONS icon) {
     case ICONS.POWER: {iconData = FontAwesomeIcons.superscript; return iconData;}
   }
 }
+/////////
+enum DIFFICULTY {
+  EASY, MEDIUM, HARD
+}
+
+
+
+class DifficultyRadio extends StatefulWidget {
+
+
+
+  @override
+  _DifficultyRadioState createState() => _DifficultyRadioState();
+}
+
+class _DifficultyRadioState extends State<DifficultyRadio> {
+
+  List<String> difficulties = ['EASY', 'MIDD', 'HARD'];
+
+  void setSelectedDifficulty(String selected) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('DIFFICULTY', selected);
+  }
+  Future<String> getSelectedDifficulty() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString('DIFFICULTY');
+  }
+
+  void changeSelected(sel){
+    _selected = sel;
+    setSelectedDifficulty(_selected);
+    setState(() {});
+  }
+
+  var _selected;
+  @override
+  void initState() {
+    getSelectedDifficulty().then((result) => {
+      _selected = result,
+        setState(() {
+
+
+    })
+    });
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if(_selected == null) _selected = 'MIDD';
+    return Column(
+      children: <Widget>[
+        RadioButtonGroup(
+            labels: difficulties,
+        activeColor: Colors.lightGreenAccent,
+        onSelected: changeSelected,
+            labelStyle: TextStyle(letterSpacing: 2,),
+          picked: _selected,
+        ),
+      ],
+    );
+  }
+}
+
