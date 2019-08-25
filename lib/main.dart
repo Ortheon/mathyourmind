@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MathYourMind',
       theme: ThemeData(
-        canvasColor: Color.fromRGBO(31, 120, 237, 0.7)
+        canvasColor: Colors.grey.withOpacity(0.6),
       ),
       initialRoute: MenuScreen.routeName,
       routes: {

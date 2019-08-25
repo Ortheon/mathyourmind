@@ -11,10 +11,14 @@ class AnswerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(onPressed: funtion,
-      color: color,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      child: Text(text),
+    return Expanded(
+      child: RaisedButton(onPressed: funtion,
+        color: color,
+        shape: UnderlineInputBorder(borderSide: BorderSide(width:20)),
+        child: Text(text,
+            style: TextStyle(fontSize: 32),
+        softWrap: true,),
+      ),
     );
   }
 }
