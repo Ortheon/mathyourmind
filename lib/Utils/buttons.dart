@@ -4,17 +4,17 @@ class AnswerButton extends StatelessWidget {
 
   final Color color;
   final String text;
-  final Function funtion;
+  final Function function;
 
 
-  AnswerButton(this.color, this.text, this.funtion);
+  AnswerButton(this.color, this.text, this.function);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: RaisedButton(onPressed: funtion,
+      child: RaisedButton(onPressed: function,
         color: color,
-        shape: UnderlineInputBorder(borderSide: BorderSide(width:20)),
+        shape: Border.fromBorderSide(BorderSide(style: BorderStyle.solid)),
         child: Text(text,
             style: TextStyle(fontSize: 32),
         softWrap: true,),

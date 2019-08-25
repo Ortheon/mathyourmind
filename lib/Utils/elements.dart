@@ -100,6 +100,7 @@ class _AppIconButtonState extends State<AppIconButton> {
         changeStateOfAButton();
       },
       child: Icon(getProperIcon(widget.icon),
+      size: 30,
       color: _toggled ? Colors.green: Colors.black54,),
       //color: toggled? Colors.lightGreen : Colors.black54,
     );
@@ -144,7 +145,7 @@ class DifficultyRadio extends StatefulWidget {
 
 class _DifficultyRadioState extends State<DifficultyRadio> {
   //TODO Rozjezdza sie cholerstwo
-  List<String> difficulties = ['EASY', 'MIDD', 'HARD'];
+  List<String> difficulties = ['60s', '45s', '30s'];
 
   void setSelectedDifficulty(String selected) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -174,15 +175,28 @@ class _DifficultyRadioState extends State<DifficultyRadio> {
 
   @override
   Widget build(BuildContext context) {
-    if(_selected == null) _selected = 'MIDD';
+    if(_selected == null) _selected = '45s';
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         RadioButtonGroup(
             labels: difficulties,
+        orientation: GroupedButtonsOrientation.HORIZONTAL,
         activeColor: Colors.lightGreenAccent,
         onSelected: changeSelected,
             labelStyle: TextStyle(letterSpacing: 2,),
           picked: _selected,
+          margin: EdgeInsets.all(5),
+          padding: EdgeInsets.all(5),
+          itemBuilder: (Radio rb, Text txt, int i){
+              return Row(
+                children: <Widget>[
+                  rb,
+                  txt,
+                ],
+              );
+          },
         ),
       ],
     );
@@ -204,9 +218,9 @@ Future<int> getGameTime() async {
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   String difficulty = preferences.getString('DIFFICULTY');
   switch(difficulty) {
-    case 'EASY' : {return 60;}
-    case 'MIDD' : {return 45;}
-    case 'HARD' : {return 30;}
+    case '60s' : {return 60;}
+    case '45s' : {return 45;}
+    case '30s' : {return 30;}
     default: return 45;
   }
 }
