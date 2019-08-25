@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mathyourmind/Utils/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mathyourmind/Utils/enums.dart';
 import 'SharedPrefsHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
@@ -30,7 +31,7 @@ class RoundedButton extends StatelessWidget {
 
 class AppIconButton extends StatefulWidget {
 
-  final ICONS icon;
+  final EQUATIONS icon;
 
   AppIconButton(this.icon);
 
@@ -58,19 +59,19 @@ class _AppIconButtonState extends State<AppIconButton> {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     //'add', 'subtract', 'multiply', 'divide', 'squareroot', 'power'
     switch(widget.icon) {
-      case ICONS.PLUS: {
+      case EQUATIONS.PLUS: {
         preferences.setBool('add', b);
         break;}
-      case ICONS.MINUS: {
+      case EQUATIONS.MINUS: {
         preferences.setBool('subtract', b);
         break;}
-      case ICONS.MULTIPLY: {preferences.setBool('multiply', b);
+      case EQUATIONS.MULTIPLY: {preferences.setBool('multiply', b);
       break;}
-      case ICONS.DIVIDE: {preferences.setBool('divide', b);
+      case EQUATIONS.DIVIDE: {preferences.setBool('divide', b);
       break;}
-      case ICONS.SQUAREROOT: {preferences.setBool('squareroot', b);
+      case EQUATIONS.SQUAREROOT: {preferences.setBool('squareroot', b);
       break;}
-      case ICONS.POWER: {preferences.setBool('power', b);
+      case EQUATIONS.POWER: {preferences.setBool('power', b);
       break;}
     }
   }
@@ -80,12 +81,12 @@ class _AppIconButtonState extends State<AppIconButton> {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     //'add', 'subtract', 'multiply', 'divide', 'squareroot', 'power'
     switch(widget.icon) {
-      case ICONS.PLUS: {return preferences.getBool('add') ?? false;}
-      case ICONS.MINUS: {return preferences.getBool('subtract') ?? false;}
-      case ICONS.MULTIPLY: {return preferences.getBool('multiply') ?? false;}
-      case ICONS.DIVIDE: {return preferences.getBool('divide') ?? false;}
-      case ICONS.SQUAREROOT: {return preferences.getBool('squareroot') ?? false;}
-      case ICONS.POWER: {return preferences.getBool('power') ?? false;}
+      case EQUATIONS.PLUS: {return preferences.getBool('add') ?? false;}
+      case EQUATIONS.MINUS: {return preferences.getBool('subtract') ?? false;}
+      case EQUATIONS.MULTIPLY: {return preferences.getBool('multiply') ?? false;}
+      case EQUATIONS.DIVIDE: {return preferences.getBool('divide') ?? false;}
+      case EQUATIONS.SQUAREROOT: {return preferences.getBool('squareroot') ?? false;}
+      case EQUATIONS.POWER: {return preferences.getBool('power') ?? false;}
     }
   }
 
@@ -115,18 +116,15 @@ class _AppIconButtonState extends State<AppIconButton> {
   }
 }
 
-enum ICONS {
-  PLUS, MINUS, MULTIPLY, DIVIDE, SQUAREROOT, POWER
-}
-IconData getProperIcon(ICONS icon) {
+IconData getProperIcon(EQUATIONS icon) {
   IconData iconData;
   switch(icon) {
-    case ICONS.PLUS: {iconData = FontAwesomeIcons.plus; return iconData;}
-    case ICONS.MINUS: {iconData = FontAwesomeIcons.minus; return iconData;}
-    case ICONS.MULTIPLY: {iconData = FontAwesomeIcons.times; return iconData;}
-    case ICONS.DIVIDE: {iconData = FontAwesomeIcons.divide; return iconData;}
-    case ICONS.SQUAREROOT: {iconData = FontAwesomeIcons.squareRootAlt; return iconData;}
-    case ICONS.POWER: {iconData = FontAwesomeIcons.superscript; return iconData;}
+    case EQUATIONS.PLUS: {iconData = FontAwesomeIcons.plus; return iconData;}
+    case EQUATIONS.MINUS: {iconData = FontAwesomeIcons.minus; return iconData;}
+    case EQUATIONS.MULTIPLY: {iconData = FontAwesomeIcons.times; return iconData;}
+    case EQUATIONS.DIVIDE: {iconData = FontAwesomeIcons.divide; return iconData;}
+    case EQUATIONS.SQUAREROOT: {iconData = FontAwesomeIcons.squareRootAlt; return iconData;}
+    case EQUATIONS.POWER: {iconData = FontAwesomeIcons.superscript; return iconData;}
   }
 }
 /////////
@@ -145,7 +143,7 @@ class DifficultyRadio extends StatefulWidget {
 }
 
 class _DifficultyRadioState extends State<DifficultyRadio> {
-
+  //TODO Rozjezdza sie cholerstwo
   List<String> difficulties = ['EASY', 'MIDD', 'HARD'];
 
   void setSelectedDifficulty(String selected) async {
@@ -169,8 +167,6 @@ class _DifficultyRadioState extends State<DifficultyRadio> {
     getSelectedDifficulty().then((result) => {
       _selected = result,
         setState(() {
-
-
     })
     });
 
@@ -193,3 +189,14 @@ class _DifficultyRadioState extends State<DifficultyRadio> {
   }
 }
 
+Future<List<int>> getPossibleEquation() async {
+  List<int> eq = new List();
+  final SharedPreferences preferences = await SharedPreferences.getInstance();
+  if(preferences.getBool('add' ?? false) == true) eq.add(EQUATIONS.PLUS.index);
+  if(preferences.getBool('subtract' ?? false) == true) eq.add(EQUATIONS.MINUS.index);
+  if(preferences.getBool('multiply' ?? false) == true) eq.add(EQUATIONS.MULTIPLY.index);
+  if(preferences.getBool('divide' ?? false) == true) eq.add(EQUATIONS.DIVIDE.index);
+  if(preferences.getBool('squareroot' ?? false) == true) eq.add(EQUATIONS.SQUAREROOT.index);
+  if(preferences.getBool('power' ?? false) == true) eq.add(EQUATIONS.POWER.index);
+  return eq;
+}

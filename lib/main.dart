@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './Screens/menu_screen.dart';
 import './Screens/play_setting_screen.dart';
+import './Screens/play_screen.dart';
 
 
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         MenuScreen.routeName : (context) => MenuScreen(),
         PlaySettingScreen.routeName : (context) => PlaySettingScreen(),
+        PlayScreen.routeName : (context) => PlayScreen(),
       },
     );
   }
