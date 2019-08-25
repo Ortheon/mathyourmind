@@ -7,29 +7,29 @@ class Equation {
   var a;
   var b;
   EQUATIONS sign;
-  var answer;
-  var maxGeneratedNumber = 20; //from difficulty
+  double answer;
+  var maxGeneratedNumber = 27; //from difficulty
 
   //TODO POPRAW TO xD
   void calculateAnswer() {
     switch(sign) {
       case EQUATIONS.PLUS:
-        answer = a + b;
+        answer = double.parse((a + b).toString());
         break;
       case EQUATIONS.MINUS:
-        answer = a-b;
+        answer = double.parse((a - b).toString());
         break;
       case EQUATIONS.MULTIPLY:
-        answer = a * b;
+        answer = double.parse((a * b).toString());
         break;
       case EQUATIONS.DIVIDE:
-        answer = a/b;
+        answer = double.parse((a / b).toString());
         break;
       case EQUATIONS.SQUAREROOT:
-        answer = sqrt(a);
+        answer = double.parse((sqrt(a)).toString());
         break;
       case EQUATIONS.POWER:
-        answer = pow(a, b);
+        answer = double.parse((pow(a, b)).toString());
         break;
     }
 
@@ -53,8 +53,9 @@ class Equation {
 
     if(this.sign == EQUATIONS.POWER || this.sign == EQUATIONS.SQUAREROOT) this.maxGeneratedNumber =  (maxGeneratedNumber/4).round();
 
-    this.a = Random().nextInt(maxGeneratedNumber)+1;
-    this.b = Random().nextInt(maxGeneratedNumber)+1;
+    this.a = Random().nextInt(maxGeneratedNumber)+3;
+    this.b = Random().nextInt(maxGeneratedNumber)+3;
+    while(b==a) this.b = Random().nextInt(maxGeneratedNumber)+3;
     calculateAnswer();
   }
 

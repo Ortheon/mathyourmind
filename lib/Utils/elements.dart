@@ -200,3 +200,13 @@ Future<List<int>> getPossibleEquation() async {
   if(preferences.getBool('power' ?? false) == true) eq.add(EQUATIONS.POWER.index);
   return eq;
 }
+Future<int> getGameTime() async {
+  final SharedPreferences preferences = await SharedPreferences.getInstance();
+  String difficulty = preferences.getString('DIFFICULTY');
+  switch(difficulty) {
+    case 'EASY' : {return 60;}
+    case 'MIDD' : {return 45;}
+    case 'HARD' : {return 30;}
+    default: return 45;
+  }
+}
