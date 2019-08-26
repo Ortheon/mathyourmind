@@ -90,7 +90,6 @@ class _AppIconButtonState extends State<AppIconButton> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     if(_toggled == null) _toggled = false;
@@ -136,16 +135,13 @@ enum DIFFICULTY {
 
 
 class DifficultyRadio extends StatefulWidget {
-
-
-
   @override
   _DifficultyRadioState createState() => _DifficultyRadioState();
 }
 
 class _DifficultyRadioState extends State<DifficultyRadio> {
   //TODO Rozjezdza sie cholerstwo
-  List<String> difficulties = ['60s', '45s', '30s'];
+  List<String> difficulties = ['60', '45', '30'];
 
   void setSelectedDifficulty(String selected) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -175,7 +171,7 @@ class _DifficultyRadioState extends State<DifficultyRadio> {
 
   @override
   Widget build(BuildContext context) {
-    if(_selected == null) _selected = '45s';
+    if(_selected == null) _selected = '45';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -218,9 +214,32 @@ Future<int> getGameTime() async {
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   String difficulty = preferences.getString('DIFFICULTY');
   switch(difficulty) {
-    case '60s' : {return 60;}
-    case '45s' : {return 45;}
-    case '30s' : {return 30;}
+    case '60' : {return 60;}
+    case '45' : {return 45;}
+    case '30' : {return 30;}
     default: return 45;
+  }
+}
+
+Future<bool> checkIfAtLeastOneSignIsChoose() async {
+  final SharedPreferences preferences = await SharedPreferences.getInstance();
+
+  return
+    (
+        (preferences.getBool('add') ?? false)         == true
+            ||  (preferences.getBool('subtract') ?? false)    == true
+            ||  (preferences.getBool('multiply') ?? false)    == true
+            ||  (preferences.getBool('divide') ?? false)      == true
+            ||  (preferences.getBool('squareroot') ?? false)  == true
+            ||  (preferences.getBool('power') ?? false)       == true
+    );
+}
+
+void forcePlusMinusSignsIfNoSignsWereChoosen(bool value) async {
+  if(value) {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setBool('add', true);
+    preferences.setBool('subtract', true);
+    debugPrint('forcePlusMinusSignsIfNoSignsWereChoosen entered with value set as: ' + value.toString());
   }
 }

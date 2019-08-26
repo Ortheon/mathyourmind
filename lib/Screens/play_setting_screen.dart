@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Utils/elements.dart';
 import '../Utils/enums.dart';
+import '../Utils/radiobutton.dart';
 
 class PlaySettingScreen extends StatefulWidget {
   static const routeName = 'play-settings';
@@ -10,8 +11,12 @@ class PlaySettingScreen extends StatefulWidget {
 }
 
 class _PlaySettingScreenState extends State<PlaySettingScreen> {
+  
+  
+
   @override
   Widget build(BuildContext context) {
+    var orientation = MediaQuery.of(context).orientation;
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -34,8 +39,7 @@ class _PlaySettingScreenState extends State<PlaySettingScreen> {
               ],
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height*0.1,
-
+              height: MediaQuery.of(context).size.height*0.05,
             ),
             Row(
               //crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,26 +79,58 @@ class _PlaySettingScreenState extends State<PlaySettingScreen> {
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height*0.05,
-
             ),
             Row(
-
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Text('Play time',
+                    Text('Seconds of play',
                       style: TextStyle(fontSize: 20),),
                     DifficultyRadio(),
                   ],
                 ),
+                (orientation == Orientation.landscape) ? SizedBox(
+                  width: MediaQuery.of(context).size.width*0.05,
+                ):Column(),
+                (orientation == Orientation.landscape) ?Column(
+                  children: <Widget>[
+                    Text('Number of questions',
+                      style: TextStyle(fontSize: 20),),
+                    QuestionNumberRadioButton(),
+                  ],
+                ) : Column(),
 
               ],
-            )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                (orientation != Orientation.landscape) ? Column(
+                  children: <Widget>[
+                    Text('Number of questions',
+                      style: TextStyle(fontSize: 20),),
+                    QuestionNumberRadioButton(),
+                  ],
+                ) : Column(),
+              ],
+            ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    //looks like a #$$$ but it's necessary if I'd like to avoid changing SDK min version
+    checkIfAtLeastOneSignIsChoose().then(
+          (value) => {
+            forcePlusMinusSignsIfNoSignsWereChoosen(!value),
+          },
+    );
+    setState(() {});
   }
 }

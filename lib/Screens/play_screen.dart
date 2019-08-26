@@ -5,6 +5,7 @@ import '../Utils/elements.dart';
 import '../Utils/enums.dart';
 import 'dart:async';
 import 'dart:math';
+import '../Utils/radiobutton.dart';
 
 class PlayScreen extends StatefulWidget {
   static const String routeName = 'play-screen';
@@ -25,6 +26,7 @@ class _PlayScreenState extends State<PlayScreen> {
 
   int lives = 3;
   int questionNumber = 1;
+  int numberOfQuestions = 10;
   int points = 0;
   List<double> answers = new List();
 
@@ -158,6 +160,15 @@ class _PlayScreenState extends State<PlayScreen> {
   @override
   void initState() {
     startTimer();
+
+    getSelectedPossibility().then((questions) => this.numberOfQuestions = int.parse(questions));
+
+    checkIfAtLeastOneSignIsChoose().then(
+          (value) => {
+        forcePlusMinusSignsIfNoSignsWereChoosen(!value),
+      },
+    );
+
     getGameTime().then((time) => _timeLeft = time);
     getPossibleEquation().then((result) => {
           result.shuffle(),
@@ -185,7 +196,7 @@ class _PlayScreenState extends State<PlayScreen> {
                     child: Center(
                         child: isStarted
                             ? Text(_timeLeft.toString(),
-                                style: TextStyle(fontSize: 32))
+                                style: TextStyle(fontSize: 42, fontStyle: FontStyle.italic))
                             : Text('TIME')),
                     decoration: BoxDecoration(
                       gradient: RadialGradient(colors: [
@@ -206,10 +217,17 @@ class _PlayScreenState extends State<PlayScreen> {
                       width: 100,
                       child: DecoratedBox(
                         child: Center(
-                            child: !_timer.isActive
-                                ? Text(questionNumber.toString(),
-                                    style: TextStyle(fontSize: 32))
-                                : Text((3 - _timer.tick).toString())),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                !_timer.isActive
+                                    ? Text(questionNumber.toString(),
+                                        style: TextStyle(fontSize: 42, fontStyle: FontStyle.italic))
+                                    : Text((3 - _timer.tick).toString()),
+                                !_timer.isActive ? Text('/' + (numberOfQuestions).toString(),
+                                  style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),) : Text(''),
+                              ],
+                            )),
                         decoration: BoxDecoration(
                           gradient: RadialGradient(colors: [
                             Colors.blueGrey.withOpacity(0.7),
@@ -233,12 +251,21 @@ class _PlayScreenState extends State<PlayScreen> {
                   width: 120,
                   child: DecoratedBox(
                     child: Center(
-                        child: isStarted
-                            ? Text(
-                                points.toString(),
-                                style: TextStyle(fontSize: 32),
-                              )
-                            : Text('POINTS')),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            isStarted
+                                ? Text(
+                                    points.toString(),
+                                    //+ '/' + (questionNumber-1).toString()
+                                    style: TextStyle(fontSize: 32, fontStyle: FontStyle.italic),
+                                  )
+                                : Text('POINTS'),
+                            isStarted ? Text('/' + (questionNumber-1).toString(),
+                            style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),) : Text(''),
+                          ],
+                        )),
                     decoration: BoxDecoration(
                       gradient: RadialGradient(colors: [
                         Colors.blueGrey.withOpacity(0.9),
