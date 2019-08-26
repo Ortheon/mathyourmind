@@ -44,6 +44,12 @@ class _PlaySettingScreenState extends State<PlaySettingScreen> {
                 Column(
                   children: <Widget>[
                     Row(
+                      children: <Widget>[
+                        Text('Equation signs',
+                          style: TextStyle(fontSize: 20),),
+                      ],
+                    ),
+                    Row(
                       //crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         AppIconButton(EQUATIONS.PLUS),
@@ -72,10 +78,18 @@ class _PlaySettingScreenState extends State<PlaySettingScreen> {
 
             ),
             Row(
+
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                DifficultyRadio(),
+                Column(
+                  children: <Widget>[
+                    Text('Play time',
+                      style: TextStyle(fontSize: 20),),
+                    DifficultyRadio(),
+                  ],
+                ),
+
               ],
             )
           ],

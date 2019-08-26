@@ -7,7 +7,6 @@ import 'dart:async';
 import 'dart:math';
 
 class PlayScreen extends StatefulWidget {
-
   static const String routeName = 'play-screen';
 
   @override
@@ -15,7 +14,6 @@ class PlayScreen extends StatefulWidget {
 }
 
 class _PlayScreenState extends State<PlayScreen> {
-
   Equation equation;
   bool isStarted = false;
 
@@ -31,30 +29,24 @@ class _PlayScreenState extends State<PlayScreen> {
   List<double> answers = new List();
 
   void answerQuestion(var answer) {
-
-    if(equation.answer == answer) {
+    if (equation.answer == answer) {
       points++;
       print('points' + points.toString());
-    }
-    else {
+    } else {
       lives--;
-      if(lives<1) {
+      if (lives < 1) {
         //TODO ALERT, PO KLIKNIECIU WYPIERDALA NA EKRAN POCZATKOWY
       }
     }
 
-    getPossibleEquation().then(
-            (result) =>  {
-              result.shuffle(),
-              equation = Equation(sign: EQUATIONS.values[result.last]),
-            generateAnswer(),
-            questionNumber++,
-            });
+    getPossibleEquation().then((result) => {
+          result.shuffle(),
+          equation = Equation(sign: EQUATIONS.values[result.last]),
+          generateAnswer(),
+          questionNumber++,
+        });
 
-
-    setState(() {
-    });
-
+    setState(() {});
   }
 
   void generateAnswer() {
@@ -63,8 +55,8 @@ class _PlayScreenState extends State<PlayScreen> {
     //todo na mapach
     bool doubleOrInt = ((equation.sign == EQUATIONS.PLUS) ||
         (equation.sign == EQUATIONS.MINUS) ||
-        (equation.sign == EQUATIONS.MULTIPLY) | (equation.sign ==
-            EQUATIONS.POWER));
+        (equation.sign == EQUATIONS.MULTIPLY) |
+            (equation.sign == EQUATIONS.POWER));
     int parse = 2;
 
     bool isNotUnique(double a, double b, double c, double d) {
@@ -76,53 +68,53 @@ class _PlayScreenState extends State<PlayScreen> {
       return true;
     }
 
-
     var falseAnswer1;
     var falseAnswer2;
     var falseAnswer3;
 
     if (doubleOrInt) parse = 0;
     do {
-      falseAnswer1 = double.parse((Random().nextDouble() * answer *
-          (Random().nextDouble() + Random().nextDouble()+ Random().nextDouble())).toStringAsFixed(
-          parse));
-      falseAnswer2 = double.parse((Random().nextDouble() * answer *
-          (Random().nextDouble() + Random().nextDouble())).toStringAsFixed(
-          parse));
-      falseAnswer3 = double.parse((Random().nextDouble() * answer *
-          (Random().nextDouble() + Random().nextDouble())).toStringAsFixed(
-          parse));
+      falseAnswer1 = double.parse((Random().nextDouble() *
+              answer *
+              (Random().nextDouble() +
+                  Random().nextDouble() +
+                  Random().nextDouble()))
+          .toStringAsFixed(parse));
+      falseAnswer2 = double.parse((Random().nextDouble() *
+              answer *
+              (Random().nextDouble() + Random().nextDouble()))
+          .toStringAsFixed(parse));
+      falseAnswer3 = double.parse((Random().nextDouble() *
+              answer *
+              (Random().nextDouble() + Random().nextDouble()))
+          .toStringAsFixed(parse));
 
-      if (doubleOrInt) {
-        answer.floor();
-        falseAnswer1.ceilToDouble();
-        falseAnswer2.floorToDouble();
-        falseAnswer3.ceilToDouble();
-      }
+
+      answer = double.parse(answer.toStringAsFixed(parse));
+
+        print('gen answer: ' + answer.toString());
+        print('gen answer1: ' + falseAnswer1.toString());
+        print('gen answer2: ' + falseAnswer2.toString());
+        print('gen answer3: ' + falseAnswer3.toString());
+
     } while (isNotUnique(answer, falseAnswer1, falseAnswer2, falseAnswer3));
-
-
-
 
     answers.add(answer);
     answers.add(falseAnswer1);
     answers.add(falseAnswer2);
     answers.add(falseAnswer3);
     answers.shuffle();
-    setState(() {
-    });
+    setState(() {});
 
     print('answer: ' + answer.toString());
-
   }
-
 
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
     _timer = new Timer.periodic(
       oneSec,
-          (Timer timer) => setState(
-            () {
+      (Timer timer) => setState(
+        () {
           if (_start < 1) {
             timer.cancel();
             isStarted = true;
@@ -131,9 +123,7 @@ class _PlayScreenState extends State<PlayScreen> {
           } else {
             _start = _start - 1;
             print('Start time: ' + _start.toString());
-            setState(() {
-
-            });
+            setState(() {});
           }
         },
       ),
@@ -144,16 +134,14 @@ class _PlayScreenState extends State<PlayScreen> {
     const oneSec = const Duration(seconds: 1);
     _gameTimer = new Timer.periodic(
       oneSec,
-          (Timer timer) => setState(
-            () {
+      (Timer timer) => setState(
+        () {
           if (_timeLeft < 1) {
             timer.cancel();
           } else {
             _timeLeft = _timeLeft - 1;
             //print('Left time: ' + _timeLeft.toString());
-            setState(() {
-
-            });
+            setState(() {});
           }
         },
       ),
@@ -171,112 +159,178 @@ class _PlayScreenState extends State<PlayScreen> {
   void initState() {
     startTimer();
     getGameTime().then((time) => _timeLeft = time);
-    getPossibleEquation().then(
-            (result) =>  {
-              result.shuffle(),
-            equation = Equation(sign: EQUATIONS.values[result.first]),
-
-        result.forEach(
-                    (element) => debugPrint(element.toString()))});
-    setState(() {
-    });
-
-
+    getPossibleEquation().then((result) => {
+          result.shuffle(),
+          equation = Equation(sign: EQUATIONS.values[result.first]),
+          result.forEach((element) => debugPrint(element.toString()))
+        });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    if(equation == null) equation = Equation(sign: EQUATIONS.MINUS);
+    if (equation == null) equation = Equation(sign: EQUATIONS.MINUS);
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
-      body: SafeArea(child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              SizedBox(
-                height: 100,
-                width: 120,
-                child: DecoratedBox(child: Center(child: isStarted ? Text(_timeLeft.toString(), style: TextStyle(fontSize: 32)): Text('TIME')),
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(colors: [Color.fromRGBO(208, 209, 216, 1), Theme.of(context).canvasColor]),
-                  borderRadius: BorderRadius.only( bottomRight: Radius.circular(45)),
-                  //border: Border.all(style: BorderStyle.solid, width: 1, ),
-                ),),
-              ),
-
-              Expanded(
-                child: SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: DecoratedBox(child: Center(child: !_timer.isActive ? Text(questionNumber.toString(), style: TextStyle(fontSize: 32)) : Text((3-_timer.tick).toString())),
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(colors: [Color.fromRGBO(208, 209, 216, 1), Theme.of(context).canvasColor]),
-                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(45), bottomLeft: Radius.circular(45)),
-                      border: Border.all(style: BorderStyle.solid, width: 0,color: Theme.of(context).canvasColor.withOpacity(0.5) ),
-                    ),),
-                ),
-              ),
-
-              SizedBox(
-                height: 100,
-                width: 120,
-                child: DecoratedBox(child: Center(child: isStarted ? Text(points.toString(), style: TextStyle(fontSize: 32),) : Text('POINTS')),
-                  decoration: BoxDecoration(
-                    gradient: RadialGradient(colors: [Color.fromRGBO(208, 209, 216, 1), Theme.of(context).canvasColor]),
-                    borderRadius: BorderRadius.only( bottomLeft: Radius.circular(45)),
-                    //border: Border.all(style: BorderStyle.solid, width: 1, ),
-                  ),),
-              ),
-            ],
-          ),
-          //question
-          //answers
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16,top: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Expanded(
-                  child: SizedBox(
-                    height: 70,
-                    width: 120,
-                    child: DecoratedBox(child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Center(child: isStarted ? Text(equation.a.toString(), style: TextStyle(fontSize: 32),) : Text('...')),
-                        Center(child: isStarted ? Icon(getProperIcon(equation.sign)) : Icon(Icons.details)),
-                        Center(child: isStarted ? Text(equation.b.toString(), style: TextStyle(fontSize: 32)) : Text('...')),
-                      ],
+                SizedBox(
+                  height: 100,
+                  width: 120,
+                  child: DecoratedBox(
+                    child: Center(
+                        child: isStarted
+                            ? Text(_timeLeft.toString(),
+                                style: TextStyle(fontSize: 32))
+                            : Text('TIME')),
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(colors: [
+                        Colors.blueGrey.withOpacity(0.9),
+                        Colors.blueGrey.withOpacity(0.7)
+                      ]),
+                      borderRadius:
+                          BorderRadius.only(bottomRight: Radius.circular(45)),
+                      //border: Border.all(style: BorderStyle.solid, width: 1, ),
                     ),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [Colors.blueGrey.withOpacity(0.3), Colors.blueGrey.withOpacity(0.1)]),
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: DecoratedBox(
+                        child: Center(
+                            child: !_timer.isActive
+                                ? Text(questionNumber.toString(),
+                                    style: TextStyle(fontSize: 32))
+                                : Text((3 - _timer.tick).toString())),
+                        decoration: BoxDecoration(
+                          gradient: RadialGradient(colors: [
+                            Colors.blueGrey.withOpacity(0.7),
+                            Colors.blueGrey.withOpacity(0.6)
+                          ]),
+                          borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(45),
+                              bottomLeft: Radius.circular(45)),
+                          border: Border.all(
+                              style: BorderStyle.solid,
+                              width: 0,
+                              color:
+                                  Theme.of(context).canvasColor.withOpacity(0.5)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 120,
+                  child: DecoratedBox(
+                    child: Center(
+                        child: isStarted
+                            ? Text(
+                                points.toString(),
+                                style: TextStyle(fontSize: 32),
+                              )
+                            : Text('POINTS')),
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(colors: [
+                        Colors.blueGrey.withOpacity(0.9),
+                        Colors.blueGrey.withOpacity(0.7)
+                      ]),
+                      borderRadius:
+                          BorderRadius.only(bottomLeft: Radius.circular(45)),
+                      //border: Border.all(style: BorderStyle.solid, width: 1, ),
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                AnswerButton(Colors.blueGrey, isStarted ? answers[0].toString() : 'A',  (){if(isStarted) answerQuestion(answers[0]);}),
-                AnswerButton(Colors.blueGrey.withOpacity(0.7), isStarted ? answers[1].toString(): 'B', (){if(isStarted) answerQuestion(answers[1]);}),
-                AnswerButton(Colors.blueGrey.withOpacity(0.5), isStarted ? answers[2].toString() : 'C', (){if(isStarted) answerQuestion(answers[2]);}),
-                AnswerButton(Colors.blueGrey.withOpacity(0.3), isStarted ? answers[3].toString(): 'D', (){if(isStarted) answerQuestion(answers[3]);}),
-              ],
+            //question
+            //answers
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16, top: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SizedBox(
+                        height: 70,
+                        width: 120,
+                        child: DecoratedBox(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Center(
+                                  child: isStarted
+                                      ? Text(
+                                          equation.a.toString(),
+                                          style: TextStyle(fontSize: 32),
+                                        )
+                                      : Text('...')),
+                              Center(
+                                  child: isStarted
+                                      ? Icon(getProperIcon(equation.sign))
+                                      : Icon(Icons.details)),
+                              Center(
+                                  child: isStarted
+                                      ? Text(equation.b.toString(),
+                                          style: TextStyle(fontSize: 32))
+                                      : Text('...')),
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                              Colors.blueGrey.withOpacity(0.3),
+                              Colors.blueGrey.withOpacity(0.1)
+                            ]),
+                              //borderRadius: BorderRadius.only(topRight: Radius.elliptical(250, 75), bottomLeft: Radius.elliptical(250, 75)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )
-        ],
-
-      ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  AnswerButton(
+                      Colors.blueGrey, isStarted ? answers[0].toString() : 'A',
+                      () {
+                    if (isStarted) answerQuestion(answers[0]);
+                  }),
+                  AnswerButton(Colors.blueGrey.withOpacity(0.7),
+                      isStarted ? answers[1].toString() : 'B', () {
+                    if (isStarted) answerQuestion(answers[1]);
+                  }),
+                  AnswerButton(Colors.blueGrey.withOpacity(0.5),
+                      isStarted ? answers[2].toString() : 'C', () {
+                    if (isStarted) answerQuestion(answers[2]);
+                  }),
+                  AnswerButton(Colors.blueGrey.withOpacity(0.3),
+                      isStarted ? answers[3].toString() : 'D', () {
+                    if (isStarted) answerQuestion(answers[3]);
+                  }),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 }
-
